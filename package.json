@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "bing-chat": "^0.2.3"
+  },
+  "devDependencies": {
+    "vite": "^4.2.1"
+  }
+}
