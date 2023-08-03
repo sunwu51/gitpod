@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="btn">btn</button>
+    <button id="btn2">btn2</button>
+    <script>
+
+        (async function (){
+            var t = { id:99 };
+
+            // 注册 Service Worker
+            const registration = await navigator.serviceWorker.register('./service-worker.js');
+            console.log('Service worker registered with scope: ', registration.scope);
+
+            // 监听从serviceworker线程发送到主线程的message
+            navigator.serviceWorker.addEventListener('message', function (e) {
+                console.log('service worker传到主线程的', e.data, e); 
+                console.log(t);
+            });
+
+            // postMessage方法，从主线程发送数据到worker，注意所有的发送数据都是深拷贝，而不是共享内存。避免并发问题
+            document.getElementById('btn').addEventListener('click', function() {
+                navigator.serviceWorker.controller.postMessage(t);
+            });
+
+            document.getElementById('btn2').addEventListener('click', function() {
+                fetch('./api.json').then(res=>res.json()).then(data=>{
+                    console.log(data);
+                })
+            })
+        }) ();
+    </script>
+</body>
+</html>
