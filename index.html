@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WebSocket Client</title>
+  <script src="./sip-0.16.0.min.js"></script>
+  <script>
+    const options = {
+      aor: "sip:frank_567@sip.linphone.org", // caller
+      userAgentOption: {
+        authorizationPassword: 'frank',
+      },
+      media: {
+        constraints: { audio: true, video: false }, // audio only call
+        remote: {} // play remote audio
+      }
+    };
+
+    // WebSocket server to connect with
+    const server = "wss://" + window.location.hostname;
+
+    // Construct a SimpleUser instance
+    const simpleUser = new SIP.Web.SimpleUser(server, options);
+
+    // Connect to server and place call
+    simpleUser.connect()
+      .then((e) => {
+        console.info(e)
+        console.log("Connected to ws server")
+        console.log("打电话给sunwu511")
+        simpleUser.call("sip:sunwu511@sip.linphone.org")
+      })
+      .catch((error) => {
+        // Call failed
+        console.error(error)
+    });
+
+
+
+  </script>
+
+  <script>
+
+    // const socket = new WebSocket("wss://" + window.location.hostname);
+
+    // // 连接建立时执行的操作
+    // socket.onopen = () => {
+    //   console.log('Connected to server');
+    // };
+
+    // // 发送消息到服务器
+    // function sendMessage() {
+    //   const message = document.getElementById('message').value;
+    //   socket.send(message);
+    // }
+
+    // // 接收来自服务器的消息
+    // socket.onmessage = (event) => {
+    //     console.log(event.data.toString())
+    //   const messageContainer = document.getElementById('messages');
+    //   const messageElement = document.createElement('li');
+    //   messageElement.textContent = event.data;
+    //   messageContainer.appendChild(messageElement);
+    // };
+  </script>
+</head>
+<body>
+  <input type="text" id="message">
+  <button onclick="sendMessage()">Send</button>
+  <ul id="messages"></ul>
+</body>
+</html>
