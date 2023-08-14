@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const net = require('net');
+const sip_parsing = require('sip-parsing')
 const app = express();
 const http = require('http').createServer(app);
 const WebSocket = require('ws');
@@ -32,7 +33,8 @@ function createStream(socket, {
     //       return;
     //     }
     //   }
-      socket.send(data);
+    sip_parsing.parse(data.toString());
+    socket.send(data);
       console.log(`sip回来:
 ${data.toString()}`);
     });
@@ -71,33 +73,7 @@ ${data.toString()}`);
 
     wss.emit('connect', socket);
   });
-
-// wss.on('connection', (ws) => {
-//     console.log('A user connected');
   
-//     // 处理来自客户端的消息
-//     ws.on('message', (message) => {
-//       console.log('Received message:', message.toString());
-  
-//       // 将消息广播给所有连接的客户端
-//       wss.clients.forEach((client) => {
-//         if (client.readyState === WebSocket.OPEN) {
-//           client.send(message.toString());
-//         }
-//       });
-//     });
-  
-//     // 处理断开连接
-//     ws.on('close', () => {
-//       console.log('A user disconnected');
-//     });
-// });
-
-// app.get('/', (req, res) => {
-//     res.sendFile(__dirname + '/index.html');
-// });
-  
-
 http.listen(3000, () => {
     console.log('Server listening on port 3000');
 });
